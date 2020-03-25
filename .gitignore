@@ -12,6 +12,9 @@ __pycache__/
 # Vscode
 .vscode
 
+# Database
+migrations
+
 # Distribution / packaging
 .Python
 build/
