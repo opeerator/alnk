@@ -7,3 +7,6 @@ class Link(models.Model):
     original_link = models.URLField(null=False)
     shortened_link = models.URLField(null=False)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.date_created)
