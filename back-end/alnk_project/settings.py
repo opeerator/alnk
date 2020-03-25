@@ -43,8 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 3rd party
+    'rest_framework',
+
     # Local
-    'alnk_app'
+    'alnk_app',
 ]
 
 MIDDLEWARE = [
@@ -131,4 +134,10 @@ CACHES = {
     'default': env.cache(),
     # read os.environ['REDIS_URL']
     'redis': env.cache('REDIS_URL')
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
