@@ -2,7 +2,7 @@
 Alnk is a URL shortener designed with lightweightness, user and sysadmin-friendliness, privacy, and configurability in mind. This web application will be developed using the following technologies:
 <ul>
   <li>Django (Back-end)</li>
-  <li>DJango Rest Framework (API)</li>
+  <li>Django Rest Framework (API)</li>
   <li>Redis (Data storage)</li>
   <li>React (Front-end)</li>
 </ul>
