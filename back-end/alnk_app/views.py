@@ -30,9 +30,9 @@ class Userlist(generics.ListCreateAPIView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return get_user_model().objects.all
+            return get_user_model().objects.all()
         else:
-            return get_user_model().objects.filter(id=self.request.user)
+            return get_user_model().objects.filter(username=self.request.user)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -40,5 +40,6 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return get_user_model().objects.filter(id=self.request.user)
-
+            return get_user_model().objects.all()
+        else:
+            return get_user_model().objects.filter(username=self.request.user)
