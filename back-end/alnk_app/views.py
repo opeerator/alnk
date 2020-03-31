@@ -4,7 +4,7 @@ from rest_framework import generics
 from .serializers import LinkSerializer
 
 
-class ListLink(generics.ListAPIView):
+class ListLink(generics.ListCreateAPIView):
     serializer_class = LinkSerializer
 
     def get_queryset(self):
@@ -14,7 +14,7 @@ class ListLink(generics.ListAPIView):
             return Link.objects.filter(owner=self.request.user)
 
 
-class DetailLink(generics.RetrieveAPIView):
+class DetailLink(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = LinkSerializer
 
     def get_queryset(self):
