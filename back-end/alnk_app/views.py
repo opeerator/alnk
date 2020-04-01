@@ -1,9 +1,18 @@
 from django.shortcuts import render
-from rest_framework import generics
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect, Http404
+from rest_framework import generics
 import uuid
 from .models import Link
 from .serializers import LinkSerializer, UserSerializer
+
+
+def user_link_view(request, linkeman):
+    try:
+        user_link = Link.objects.get(shortened_link=linkeman)
+    except Exception:
+        raise Http404
+    return HttpResponseRedirect(user_link.original_link)
 
 
 class ListLink(generics.ListCreateAPIView):
