@@ -30,7 +30,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'rest_auth',
     'rest_auth.registration',
+    'cacheops',
 
     # Local
     'alnk_app',
@@ -141,13 +142,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CACHES = {
-    # read os.environ['CACHE_URL'] and raises ImproperlyConfigured exception if not found
-    'default': env.cache(),
-    # read os.environ['REDIS_URL']
-    'redis': env.cache('REDIS_URL')
-}
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -162,3 +156,16 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://localhost:8000',
 )
+
+CACHEOPS_REDIS = {
+    'host': 'localhost',
+    'port': 6379,
+    'db': 1,
+}
+
+CACHEOPS = {
+    'auth.user': {'ops': 'get', 'timeout': 60*15},
+    'auth.*': {'ops': {'fetch', 'get'}, 'timeout': 60*60},
+    'auth.permission': {'ops': 'all', 'timeout': 60*60},
+    '*.*': {'timeout': 60*60},
+}
