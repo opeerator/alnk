@@ -15,18 +15,28 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+def proxy_check(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return True
+    else:
+        return False
+
 def user_link_view(request, linkeman):
     try:
         user_link = Link.objects.get(shortened_link=linkeman)
         user_agent = parse(request.META.get('HTTP_USER_AGENT'))
         view = LinkView()
         view.requestor_browser = user_agent.browser
-        view.requestor_connection = "TEST"
         view.requestor_device = user_agent.device
         view.requestor_identity = "TEST"
         view.requestor_ip = get_client_ip(request)
         view.requestor_link = user_link
         view.requestor_os = user_agent.os
+        if proxy_check(request):
+            view.requestor_connection = "Proxy ip"
+        else:
+            view.requestor_connection = "Real ip"
         view.save()
     except Exception:
         raise Http404
