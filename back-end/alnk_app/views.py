@@ -3,13 +3,31 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect, Http404
 from rest_framework import generics
 import uuid
-from .models import Link
+from user_agents import parse
+from .models import Link, LinkView
 from .serializers import LinkSerializer, UserSerializer
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 def user_link_view(request, linkeman):
     try:
         user_link = Link.objects.get(shortened_link=linkeman)
+        user_agent = parse(request.META.get('HTTP_USER_AGENT'))
+        view = LinkView()
+        view.requestor_browser = user_agent.browser
+        view.requestor_connection = "TEST"
+        view.requestor_device = user_agent.device
+        view.requestor_identity = "TEST"
+        view.requestor_ip = get_client_ip(request)
+        view.requestor_link = user_link
+        view.requestor_os = user_agent.os
+        view.save()
     except Exception:
         raise Http404
     return HttpResponseRedirect(user_link.original_link)
