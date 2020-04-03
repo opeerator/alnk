@@ -26,14 +26,17 @@ def user_link_view(request, linkeman):
         view = LinkView()
         view.requestor_browser = user_agent.browser
         view.requestor_device = user_agent.device
-        view.requestor_identity = "TEST"
         view.requestor_ip = ip
         view.requestor_link = user_link
         view.requestor_os = user_agent.os
-        if proxy_status:
-            view.requestor_connection = "Proxy ip"
+        if user_agent.is_bot:
+            view.requestor_identity = "invalid-user: Bot"
         else:
-            view.requestor_connection = "Real ip"
+            view.requestor_identity = "valid-user"
+        if proxy_status:
+            view.requestor_connection = "Proxy Ip"
+        else:
+            view.requestor_connection = "Real Ip"
         view.save()
     except Exception:
         raise Http404
